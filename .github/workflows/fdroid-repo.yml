@@ -36,15 +36,11 @@ jobs:
         working-directory: workdir
         run: |
           fdroid init
-          cat > config.yml <<'EOF'
-          repo_url: https://0x8e8fb-p.github.io/argus-releases/repo
-          repo_name: Argus Releases
-          repo_description: >-
-            Ad Blocker for Android TV. Official binary repository — the APKs
-            here are signed by the Argus release key and identical to the ones
-            on the GitHub Releases page.
-          archive_url: https://0x8e8fb-p.github.io/argus-releases/repo/archive
-          EOF
+          # init already wrote repo_url/repo_name defaults + keystore entries;
+          # overwrite just the identity keys, keep the generated keystorepass.
+          sed -i 's|^repo_url:.*|repo_url: https://0x8e8fb-p.github.io/argus-releases/repo|' config.yml
+          sed -i 's|^repo_name:.*|repo_name: Argus Releases|' config.yml
+          sed -i 's|^archive_url:.*|archive_url: https://0x8e8fb-p.github.io/argus-releases/repo/archive|' config.yml
           fdroid update --create-metadata
 
       - name: Publish repo into docs/repo (Pages path)
