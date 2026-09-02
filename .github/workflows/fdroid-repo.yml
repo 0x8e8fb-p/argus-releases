@@ -36,11 +36,12 @@ jobs:
         working-directory: workdir
         run: |
           fdroid init
-          # init already wrote repo_url/repo_name defaults + keystore entries;
-          # overwrite just the identity keys, keep the generated keystorepass.
-          sed -i 's|^repo_url:.*|repo_url: https://0x8e8fb-p.github.io/argus-releases/repo|' config.yml
-          sed -i 's|^repo_name:.*|repo_name: Argus Releases|' config.yml
-          sed -i 's|^archive_url:.*|archive_url: https://0x8e8fb-p.github.io/argus-releases/repo/archive|' config.yml
+          # init's config.yml ships repo_url/repo_name COMMENTED OUT (defaults
+          # come from fdroidserver code) — sed must replace commented lines.
+          # Keep the generated keystorepass entries untouched.
+          sed -i 's|^#\?\s*repo_url:.*|repo_url: https://0x8e8fb-p.github.io/argus-releases/repo|' config.yml
+          sed -i 's|^#\?\s*repo_name:.*|repo_name: Argus Releases|' config.yml
+          sed -i 's|^#\?\s*archive_url:.*|archive_url: https://0x8e8fb-p.github.io/argus-releases/repo/archive|' config.yml
           fdroid update --create-metadata
 
       - name: Publish repo into docs/repo (Pages path)
