@@ -51,6 +51,14 @@ adb install argus.apk
 ```
 Enable Developer Options + USB/Wireless debugging on the TV first. adb installs stay exempt from Google's developer-verification checks.
 
+### 0. One-line short URL (Downloader, typeable)
+
+Just enter this in the Downloader app or any TV browser:
+```
+0x8e8fb-p.github.io/argus-releases
+```
+It redirects straight to the latest APK — no long URL typing.
+
 ### 6. F-Droid client (custom repo)
 
 Add this repository in your F-Droid client (Repositories → +):
