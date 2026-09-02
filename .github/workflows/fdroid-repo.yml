@@ -1,0 +1,43 @@
+# Deploy on the PUBLIC argus-releases repo as .github/workflows/fdroid-repo.yml
+# Builds the own-F-Droid repo from the latest release APK and publishes to
+# GitHub Pages (branch gh-pages). Requires: Pages enabled (source: gh-pages).
+name: F-Droid repo
+
+on:
+  schedule:
+    - cron: '17 3 * * *'   # daily, off-peak
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  fdroid:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install fdroidserver
+        run: pip install fdroidserver
+
+      - name: Fetch latest APK
+        run: |
+          mkdir -p repo
+          curl -sL -o repo/com.nexusblock.apk \
+            https://github.com/0x8e8fb-p/argus-releases/releases/download/latest/argus.apk
+
+      - name: fdroid init + update
+        run: |
+          fdroid init
+          fdroid update --create-metadata
+
+      - name: Deploy to gh-pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./repo
