@@ -1,6 +1,7 @@
 # Deploy on the PUBLIC argus-releases repo as .github/workflows/fdroid-repo.yml
-# Builds the own-F-Droid repo from the latest release APK and publishes to
-# GitHub Pages (branch gh-pages). Requires: Pages enabled (source: gh-pages).
+# Builds the own-F-Droid repo from the latest release APK and publishes it
+# under docs/repo/ on main (Pages serves main/docs → repo URL is
+# https://0x8e8fb-p.github.io/argus-releases/repo/).
 name: F-Droid repo
 
 on:
@@ -27,17 +28,24 @@ jobs:
 
       - name: Fetch latest APK
         run: |
-          mkdir -p repo
-          curl -sL -o repo/com.nexusblock.apk \
+          mkdir -p workdir/repo
+          curl -sL -o workdir/repo/com.nexusblock.apk \
             https://github.com/0x8e8fb-p/argus-releases/releases/download/latest/argus.apk
 
       - name: fdroid init + update
+        working-directory: workdir
         run: |
           fdroid init
           fdroid update --create-metadata
 
-      - name: Deploy to gh-pages
-        uses: peaceiris/actions-gh-pages@v4
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./repo
+      - name: Publish repo into docs/repo (Pages path)
+        run: |
+          mkdir -p docs/repo
+          rm -rf docs/repo/*
+          cp -r workdir/repo/. docs/repo/
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add docs/repo
+          git diff --cached --quiet && echo "No repo changes" && exit 0
+          git commit -m "Update F-Droid repo index [skip ci]"
+          git push
