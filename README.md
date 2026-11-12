@@ -2,8 +2,9 @@
 
 Argus blocks ads and trackers **at the DNS layer** on Android TV, Google TV and
 Fire TV: YouTube, Prime Video, Hotstar, SonyLiv, Zee5 and anything else on the
-device. It runs a local VPN that filters DNS, so every lookup is resolved on the
-TV itself — nothing is routed through us and there is no account in the path.
+device. It runs a local VPN that answers DNS through a filtering profile Argus
+manages for you, so there is nothing to configure, no account in the path, and
+no browsing history collected.
 
 **Download and install guide → https://argus-alpha-dusky.vercel.app/download**
 
@@ -21,7 +22,7 @@ https://github.com/0xargusapp/Argus-TV/releases/download/latest/argus.apk
 ```
 
 Every version keeps its own tag, for example
-[`v1.3.4`](https://github.com/0xargusapp/Argus-TV/releases/tag/v1.3.4).
+[`v1.3.6`](https://github.com/0xargusapp/Argus-TV/releases/tag/v1.3.6).
 
 ## Install
 
@@ -59,13 +60,11 @@ the download page. Every build is signed with the same key
 
 ## First run
 
-1. Create a profile at [my.nextdns.io](https://my.nextdns.io) and copy its
-   config ID.
-2. Argus → Settings → Config ID, paste it.
-3. Home → Start, then approve the VPN prompt.
+1. Open Argus and press **Start**.
+2. Approve the Android VPN prompt — it appears once.
 
-Blocklists, allow/deny rules and YouTube ad blocking are configured in the
-NextDNS dashboard. Argus only relays DNS to that profile over DoH.
+That is the whole setup. The filtering profile is fetched automatically, and
+blocklist changes reach the TV on its next refresh without a new install.
 
 ## Requirements
 
