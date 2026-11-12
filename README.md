@@ -1,91 +1,80 @@
-# Argus — Ad Blocker for Android TV
+# Argus — the ad blocker for Android TV
 
-Argus blocks ads system-wide on your Android TV / Google TV / Fire TV: YouTube, Prime Video, Hotstar, SonyLiv, Zee5, and 20+ other streaming apps. It runs a local VPN that filters DNS — everything happens on the device, nothing leaves it.
+Argus blocks ads and trackers **at the DNS layer** on Android TV, Google TV and
+Fire TV: YouTube, Prime Video, Hotstar, SonyLiv, Zee5 and anything else on the
+device. It runs a local VPN that filters DNS, so every lookup is resolved on the
+TV itself — nothing is routed through us and there is no account in the path.
 
-**Latest APK (stable URL, always the newest build):**
-```
-https://github.com/0x8e8fb-p/argus-releases/releases/download/latest/argus.apk
-```
+**Download and install guide → https://argus-alpha-dusky.vercel.app/download**
 
----
-
-## Install — pick the easiest path
-
-### 1. Downloader app (easiest, TV-only, no computer)
-
-1. Open the app store on your TV (Google Play or Amazon Appstore) and install **Downloader by AFTVnews** (orange icon).
-2. On Google TV / Android TV 12+: enable Developer Options first — Settings → System → About → tap **Android TV OS build** 7 times.
-3. Open Downloader, enter:
-   ```
-   github.com/0x8e8fb-p/argus-releases/releases/download/latest/argus.apk
-   ```
-4. When prompted, allow Downloader to **install unknown apps** (Settings button in the prompt).
-5. Select **Install**. Done.
-
-### 2. Obtainium (auto-updates forever)
-
-If you already use [Obtainium](https://github.com/ImranR98/Obtainium):
-1. Add App → paste `https://github.com/0x8e8fb-p/argus-releases`
-2. Set "APK filter" to `argus\.apk$` if asked.
-3. Install. Obtainium notifies and installs every future update.
-
-(Argus also has its own built-in updater — either mechanism works.)
-
-### 3. Send Files to TV / LocalSend (phone → TV)
-
-1. Install **Send Files to TV** (or LocalSend) on both phone and TV from the Play Store.
-2. Download `argus.apk` on your phone from the stable URL above.
-3. Send it to the TV, open the received file, allow install from unknown sources when asked, install.
-
-### 4. USB drive
-
-1. Copy `argus.apk` to a FAT32 USB stick.
-2. Plug into the TV, open a file manager (X-plore or FX File Explorer from the Play Store — not the stock one).
-3. Open the APK, allow unknown sources for the file manager, install.
-
-### 5. adb (advanced)
-
-```bash
-adb connect <tv-ip>:5555
-adb install argus.apk
-```
-Enable Developer Options + USB/Wireless debugging on the TV first. adb installs stay exempt from Google's developer-verification checks.
-
-### 0. One-line short URL (Downloader, typeable)
-
-Just enter this in the Downloader app or any TV browser:
-```
-0x8e8fb-p.github.io/argus-releases
-```
-It redirects straight to the latest APK — no long URL typing.
-
-### 6. F-Droid client (custom repo)
-
-Add this repository in your F-Droid client (Repositories → +):
-```
-https://0x8e8fb-p.github.io/argus-releases/repo/
-```
-The repo is signed by the same key as the APKs here — updates flow automatically after each release.
+That page carries the current version, the file size, the SHA-256 and the
+install steps. This repository holds the signed APKs and their notes.
 
 ---
 
-## After install (fresh TV checklist)
+## Direct download
 
-1. **Approve the VPN dialog** when Argus first opens — required, it's how filtering works.
-2. Recommended: Settings (Argus) → **Always-on VPN** → enable it in the system VPN settings — keeps protection up across reboots.
-3. Recommended: allow the **battery optimization exemption** when prompted.
-4. Optional (power users): system Private DNS toggle needs one adb command:
-   ```bash
-   adb shell pm grant com.nexusblock android.permission.WRITE_SECURE_SETTINGS
+Stable URL, always the newest published build:
+
+```
+https://github.com/0xargusapp/Argus-TV/releases/download/latest/argus.apk
+```
+
+Every version keeps its own tag, for example
+[`v1.3.4`](https://github.com/0xargusapp/Argus-TV/releases/tag/v1.3.4).
+
+## Install
+
+### Downloader (no computer)
+
+1. Install **Downloader by AFTVnews** from your TV's store.
+2. On Android TV 12+ enable Developer Options: Settings → System → About → tap
+   **Android TV OS build** seven times.
+3. In Downloader, enter:
    ```
-   Argus works fully without it.
+   github.com/0xargusapp/Argus-TV/releases/download/latest/argus.apk
+   ```
+4. Allow Downloader to install unknown apps, then Install.
 
-## Troubleshooting
+### Obtainium (updates itself)
 
-- **"Blocked by Play Protect" / "unverified developer"** — choose Details → Install anyway. Argus is not registered with Google's developer verification; nothing is wrong with the APK. (Android is adding a stricter flow from late 2026: enable it once under Developer Options → "Apps from unverified developers" if your device requires it.)
-- **App icon missing from home screen** — some launchers hide sideloaded apps: Settings → Apps → See all apps → Argus. Most TV launchers show it normally.
-- **Verify your download** — `sha256sum argus.apk` must match `argus.apk.sha256` attached to the [latest release](https://github.com/0x8e8fb-p/argus-releases/releases).
+Add `https://github.com/0xargusapp/Argus-TV` as an app source with the APK
+filter `argus\.apk$`. Every future release is offered as an update.
 
-## Not on Google Play / Amazon Appstore
+### adb (from a computer)
 
-Both stores ban system-wide ad blockers by policy. Sideloading via the paths above is the official distribution channel — only trust APKs from this repository.
+```
+adb install -r argus.apk
+```
+
+## Verify what you installed
+
+```
+shasum -a 256 argus.apk
+```
+
+Compare with `argus.apk.sha256` on the release, or with the checksum printed on
+the download page. Every build is signed with the same key
+(`CN=Argus, O=NexusBlock`), so updates install over the top — no uninstall.
+
+## First run
+
+1. Create a profile at [my.nextdns.io](https://my.nextdns.io) and copy its
+   config ID.
+2. Argus → Settings → Config ID, paste it.
+3. Home → Start, then approve the VPN prompt.
+
+Blocklists, allow/deny rules and YouTube ad blocking are configured in the
+NextDNS dashboard. Argus only relays DNS to that profile over DoH.
+
+## Requirements
+
+Android TV 7.0 (API 24) or newer, ARM or x86. One universal APK.
+
+## Notes
+
+- An account is optional. Protection works signed out, offline, and after an
+  account is deleted.
+- Not on the Play Store, deliberately: a DNS-filtering VPN is not a category
+  the store supports.
+- Found a bug or want to appeal a ban? argusapp@proton.me
